@@ -1,4 +1,4 @@
- services:
+services:
     cobalt:
         image: ghcr.io/imputnet/cobalt:11
 
@@ -11,7 +11,7 @@
             - 9000:9000/tcp
 
         environment:
-            API_URL: "http://127.0.0.1:9000"
+            API_URL: http://cobalt:9000
 
         labels:
             - com.centurylinklabs.watchtower.scope=cobalt
@@ -23,18 +23,15 @@
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
 
-    bot:
+    cobalt-bot:
         image: registry.gitlab.com/kovalssky/telegram-bot-cobalt
 
-        restart: unless-stopped
+        restart: on-failure:10
         container_name: cobalt-bot
-
-        ports:
-            - 9000:9000/tcp
 
         environment:
           # Token from @BotFather
             - TOKEN=
 
           # URL Cobalt API, no need to change. It will be raised locally.
-            - COBALT_API_URL=http://127.0.0.1:9000
+            - COBALT_API_URL=http://cobalt:9000

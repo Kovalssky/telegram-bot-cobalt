@@ -72,7 +72,7 @@ class CobaltAPI:
             return ""
         result = response.json()
         with requests.get(result["url"], stream=True) as r:
-            r.raise_for_status()
+            print(r.json(), r.status_code)
             try:
                 with open(result["filename"], "wb") as f:
                     f.write(r.content)

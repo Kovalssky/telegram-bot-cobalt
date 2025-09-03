@@ -76,6 +76,11 @@ class CobaltAPI:
             try:
                 with open(result["filename"], "wb") as f:
                     f.write(r.content)
+                log.info(f"Downloaded file saved as {result["filename"]}")
+            except requests.exceptions.RequestException as e:
+                log.error(f"Request error while downloading {url}: {e}")
+            except IOError as e:
+                log.error(f"I/O error saving file {result["filename"]}: {e}")
             except Exception as e:
-                log.error(str(e))
+                log.error(f"Unexpected error: {e}")
         return result["filename"]

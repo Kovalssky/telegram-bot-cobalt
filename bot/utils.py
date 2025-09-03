@@ -5,6 +5,7 @@ from aiogram.types import User, Message, FSInputFile
 
 from bot.locale import get_text as _
 from bot.cobalt import CobaltAPI
+from bot import log
 
 VIDEO_FORMATS = [
     "mp4", "mov", "avi", "wmv", "flv", "mkv", "webm", "mpeg", "3gp", "ts",
@@ -70,8 +71,8 @@ async def start_download(message: Message, link: str = None):
         await message.delete()
     filename = cobalt.download(url)
     if not filename:
-        await m.answer(_(message, "error_url"))
-        await m.delete()
+        await m.edit_text(_(message, "error_url"))
+        log.error(filename)
         return
     await answer(filename, m, url=url)
     await m.delete()

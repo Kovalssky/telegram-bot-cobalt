@@ -1,6 +1,8 @@
 FROM python:3.12-slim
 
 WORKDIR /app
+RUN chown root:root /app
+USER root
 
 
 RUN apt update -y && apt install -y git && rm -rf /var/lib/apt/lists/*

@@ -15,6 +15,7 @@ from bot import log
 
 load_dotenv()
 storage = MemoryStorage()
+print(os.getenv("TOKEN"))
 bot = Bot(
     token=os.getenv("TOKEN"),
     default=DefaultBotProperties(parse_mode="HTML")

@@ -4,6 +4,7 @@ from typing import Literal
 import requests
 from dotenv import load_dotenv
 from requests import Response
+from bot import log
 
 class CobaltAPI:
     def __init__(self):
@@ -72,6 +73,9 @@ class CobaltAPI:
         result = response.json()
         with requests.get(result["url"], stream=True) as r:
             r.raise_for_status()
-            with open(result["filename"], "wb") as f:
-                f.write(r.content)
+            try:
+                with open(result["filename"], "wb") as f:
+                    f.write(r.content)
+            except Exception as e:
+                log.error(str(e))
         return result["filename"]

@@ -1,6 +1,5 @@
 # Telegram-bot-cobalt
 
----
 [![version](https://img.shields.io/badge/Version-0.1.0-red?style=flat&logo=github&logoColor=white)]()
 [![GitHub](https://img.shields.io/badge/Used-Cobalt%20API-blue?style=flat&logo=github&logoColor=white)](https://github.com/imputnet/cobalt)
 

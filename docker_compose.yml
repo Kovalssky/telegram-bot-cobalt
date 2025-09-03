@@ -24,7 +24,7 @@
             - /var/run/docker.sock:/var/run/docker.sock
 
     bot:
-        image: ghcr.io/kovalssky/telegram-bot-cobalt:latest
+        image: registry.gitlab.com/kovalssky/telegram-bot-cobalt
 
         restart: unless-stopped
         container_name: cobalt-bot

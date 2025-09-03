@@ -1,0 +1,42 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  variables:
+    DEPLOY_DIR: $DEPLOY_DIR
+    SERVER_USER: $SERVER_USER
+    SERVER_HOST: $SERVER_HOST
+  before_script:
+    - apk add --no-cache openssh-client docker-cli
+    - mkdir -p ~/.ssh
+    - eval "$(ssh-agent -s)"
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - chmod 700 ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null" > ~/.ssh/config
+  script:
+    - |
+      ssh $SERVER_USER@$SERVER_HOST "
+        echo '$CI_REGISTRY_PASSWORD' | docker login registry.gitlab -u '$CI_REGISTRY_USER' --password-stdin $CI_REGISTRY
+        cd /
+        docker compose pull
+        docker compose up -d --remove-orphans
+        docker system prune -f
+      "
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

@@ -66,6 +66,7 @@ def decode_param(encoded: str) -> str:
 async def start_download(message: Message, link: str = None):
     cobalt = CobaltAPI()
     url = link if link else message.text
+    print("2: ", url)
     m = await message.answer(_(message, "wait_message", url=url))
     if "/start" in message.text:
         await message.delete()

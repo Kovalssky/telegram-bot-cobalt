@@ -41,4 +41,5 @@ async def services_cmd(message: Message):
 
 @router.message(lambda c: validators.url(c.text))
 async def url_message_handle(message: Message):
+    print("1: ", message.text)
     await utils.start_download(message)

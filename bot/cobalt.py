@@ -69,7 +69,7 @@ class CobaltAPI:
             headers=self.headers
         )
         if response.status_code != 200:
-            return ""
+            return f"{response.json()}  {response.status_code}"
         result = response.json()
         with requests.get(result["url"], stream=True) as r:
             print(r.json(), r.status_code)

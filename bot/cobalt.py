@@ -61,6 +61,7 @@ class CobaltAPI:
         return response.json()["url"]
 
     def download(self, url: str) -> str:
+        print(url)
         data = {'url': url}
         data.update(self.options)
         response = requests.post(
